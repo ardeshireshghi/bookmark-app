@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- This is an automatically generated file.
+It will be read and overwritten.
+Do Not Edit! -->
+<title>Ardi Bookmarks</title>
+<style type="text/css">
+div {
+    width: 100%;
+    margin: 1% 0;
+    display: inline-block;
+    vertical-align: top;
+    background-color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 90px;
+    text-decoration: none;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+@media screen and (min-width:481px) {
+ div {
+  width: 49%;
+  margin: .4%;
+  }
+}
+
+section {
+    max-width: 1000px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    font-family: Arial;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.59);
+    margin: 20px;
+    font-weight: 300;
+}
+
+div a {
+    font-family: Arial;
+    font-size: .9em;
+    color: #3E88DA;
+    font-weight: 700;
+    line-height: 20px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+span {
+    font-family: Arial;
+    display: block;
+    font-size: .8rem;
+    margin: 10px 0;
+    width: 100%;
+    line-height: 18px;
+}
+
+input[type="text"] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(170, 170, 170, 0.48);
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 300;
+    font-family: Arial;
+    color: #777;
+    padding: 10px;
+    outline: 0;
+}
+
+@media screen and (min-width:769px) {
+ input[type="text"] {
+  font-size: 2.2rem;
+  }
+}
+
+section.no-result {
+    font-family: Arial;
+    font-size: 2rem;
+    color: #B8B9BD;
+    text-align: center;
+    margin-top: 40px;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0);
+    width: 80%;
+    display:  none;
+}
+
+
+.btn__new__container {
+    width: 50px;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 0px;
+    margin: 0;
+    height: 50px;
+    min-height: 0;
+    -webkit-transform: scale(1) translate3d(0,0,0);
+    -moz-transform: scale(1) translate3d(0,0,0);
+    transform: scale(1) translate3d(0,0,0);
+}
+
+a.btn__new {
+  border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: #C35353;
+    padding: 10px;
+    box-sizing: border-box;
+    -webkit-transform: scale(1) translate3d(0,0,0);
+    -moz-transform: scale(1) translate3d(0,0,0);
+    transform: scale(1) translate3d(0,0,0);
+    -webkit-transition: all .25s ease;
+    -moz-transition: all .25s ease;
+    transition: all .25s ease;
+}
+
+a.btn__new:before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-decoration: none;
+    transform: translateX(-50%) translateY(-50%);
+    color: white;
+    font-size: 2.5rem;
+}
+
+@media screen and (min-width: 769px) {
+    .btn__new__container {
+        width: 80px;
+        height: 80px;
+    }
+
+    a.btn__new:before {
+        font-size: 4rem;
+    }
+}
+
+a.btn__new:hover {
+    -webkit-transform: scale(1.1) translate3d(0,0,0);
+    -moz-transform: scale(1.1) translate3d(0,0,0);
+    transform: scale(1.1) translate3d(0,0,0);
+}
+</style>
+
+</head><body style="background-color: #f8f8f8;">
+<div class="btn__new__container">
+    <a class="btn__new" href="/new" title="Add new bookmark"></a>
+</div>
+<h1>Ardi Bookmarks</h1>
+<section name="search">
+  <input type="text" name="q" placeholder="search...">
+</section>
+<section class="no-result">Oops! No bookmarks found for this search!</section>
+<section class="">
+{{#each bookmarks}}
+    <div>
+        <a href="{{href}}" add_date="{{data}}" private="{{private}}" tags="{{#each tags}}{{this}},{{/each}}" target="_blank">{{title}}</a>
+        <span>{{description}}</span>
+    </div>
+{{/each}}
+
+</section>
+
+<script type="text/javascript">
+  ;(function(root) {
+    var searchEl = document.querySelector('[name="q"]');
+
+    function doSearch(query) {
+      var allBookmarkItems = [].slice.call(document.querySelectorAll('a'));
+      var noResultEl = document.querySelector('.no-result');
+      var hadMatches = false;
+      location.hash = query;
+
+      // Array query
+      query = query.trim().replace(/\s{2,}/g, ' ').split(' ').map(function(word) {
+        return word.toLowerCase();
+      });
+
+      allBookmarkItems.forEach(function(item) {
+        var itemSibling = item.parentNode.querySelector('span');
+
+        function itemMatchesQuery() {
+            var i = -1;
+            var matched = false;
+
+            while (++i < query.length) {
+              var keyword = query[i];
+              var matches = (item.textContent.toLowerCase().indexOf(keyword) > -1 ||
+                                      item.getAttribute('tags').toLowerCase().indexOf(keyword) > -1 ||
+                                      (itemSibling !== null && itemSibling.textContent.toLowerCase().indexOf(keyword) > -1));
+              if (matches) {
+                matched = true;
+                break;
+              }
+
+            }
+
+            return matched;
+        }
+
+        item.setAttribute('target', '_blank');
+
+        if (itemMatchesQuery()) {
+          if (!hadMatches) hadMatches = true;
+          item.parentNode.style.display = 'inline-block';
+        } else {
+          item.parentNode.style.display = 'none';
+        }
+      });
+
+      if (!hadMatches) {
+        noResultEl.style.display = 'block';
+      } else {
+        noResultEl.style.display = 'none';
+      }
+    }
+
+    function reset() {
+      var allBookmarkItems = [].slice.call(document.querySelectorAll('a'));
+      var noResultEl = document.querySelector('.no-result');
+      noResultEl.style.display = 'none';
+
+      location.hash = '';
+
+      allBookmarkItems.forEach(function(item) {
+          item.parentNode.style.display = 'inline-block';
+      });
+    }
+
+    searchEl.addEventListener('keyup', function(e) {
+      var query = this.value;
+      if (query !== '') {
+        doSearch(query);
+      } else {
+        reset();
+      }
+    }, false);
+
+    if (location.hash.length > 1) {
+      doSearch(location.hash.slice(1));
+      searchEl.value = location.hash.slice(1);
+    }
+  })(window);
+</script>
+</body></html>
