@@ -1,0 +1,18 @@
+{
+  "apps" : [{
+    "name": "bookmark_app",
+    "script"      : "app/index.js",
+    "watch"       : false,
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 8000,
+      "DB_HOST": "localhost",
+      "DB_NAME": "bookmarks",
+      "NODE_PATH": "./app/lib"
+    },
+    "env_production" : {
+       "NODE_ENV": "production"
+    }
+  }
+  ]
+}

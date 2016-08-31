@@ -50,6 +50,7 @@ div a {
     line-height: 20px;
     vertical-align: middle;
     display: inline-block;
+    word-break: break-word;
 }
 
 span {
@@ -199,7 +200,7 @@ a.btn__new:hover {
             while (++i < query.length) {
               var keyword = query[i];
               var matches = (item.textContent.toLowerCase().indexOf(keyword) > -1 ||
-                                      item.getAttribute('tags').toLowerCase().indexOf(keyword) > -1 ||
+                                      (item.getAttribute('tags') && item.getAttribute('tags').toLowerCase().indexOf(keyword) > -1) ||
                                       (itemSibling !== null && itemSibling.textContent.toLowerCase().indexOf(keyword) > -1));
               if (matches) {
                 matched = true;
