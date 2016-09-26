@@ -1,7 +1,7 @@
 {
   "name": "bookmark-manager",
-  "version": "1.0.0",
-  "description": "This is the beta Atoos web app",
+  "version": "1.0.1",
+  "description": "Managing my bookmarks easily with smart search",
   "main": "app/index.js",
   "scripts": {
     "start": "NODE_PATH=./app/lib node ./app/index.js",

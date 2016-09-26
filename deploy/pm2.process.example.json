@@ -6,8 +6,10 @@
     "env": {
       "NODE_ENV": "development",
       "PORT": 8000,
-      "DB_HOST": "localhost",
-      "DB_NAME": "bookmarks",
+      "DB_HOST": "{{dbHost}}",
+      "DB_NAME": "{{dbName}}",
+      "DB_USER": "{{dbUser}}",
+      "DB_PASS": "{{dbPass}}",
       "NODE_PATH": "./app/lib"
     },
     "env_production" : {
