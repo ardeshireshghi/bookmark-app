@@ -7,6 +7,7 @@ It will be read and overwritten.
 Do Not Edit! -->
 <title>Ardi Bookmarks</title>
 <style type="text/css">
+body {padding:0; margin:0}
 div {
     width: 100%;
     margin: 1% 0;
@@ -18,15 +19,16 @@ div {
     min-height: 90px;
     text-decoration: none;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.18);
+    float: none
 }
 
-@media screen and (min-width:481px) {
- div {
-  width: 49%;
-  margin: .4%;
+@media screen and (min-width: 481px) {
+  div {
+    width: 49.7%;
+    margin: .15%;
+    float: left;
   }
 }
-
 section {
     max-width: 1000px;
     width: 90%;
@@ -74,6 +76,7 @@ input[type="text"] {
     color: #777;
     padding: 10px;
     outline: 0;
+    box-sizing: border-box;
 }
 
 @media screen and (min-width:769px) {
@@ -116,7 +119,7 @@ a.btn__new {
   border-radius: 50%;
     width: 100%;
     height: 100%;
-    background-color: #C35353;
+    background-color: #d8372d;
     padding: 10px;
     box-sizing: border-box;
     -webkit-transform: scale(1) translate3d(0,0,0);
@@ -127,8 +130,8 @@ a.btn__new {
     transition: all .25s ease;
 }
 
-a.btn__new:before {
-    content: '+';
+a.btn__new:before, a.btn__new:after {
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -136,6 +139,12 @@ a.btn__new:before {
     transform: translateX(-50%) translateY(-50%);
     color: white;
     font-size: 2.5rem;
+    width: 20px;
+    padding: 4px 0 0 0;
+    background: white;
+}
+a.btn__new:after {
+    transform: translateX(-50%) translateY(-50%) rotate(90deg);
 }
 
 @media screen and (min-width: 769px) {
@@ -144,8 +153,9 @@ a.btn__new:before {
         height: 80px;
     }
 
-    a.btn__new:before {
-        font-size: 4rem;
+    a.btn__new:before,  a.btn__new:after {
+        width: 30px;
+        padding: 6px 0 0 0;
     }
 }
 
@@ -168,7 +178,7 @@ a.btn__new:hover {
 <section class="">
 {{#each bookmarks}}
     <div>
-        <a href="{{href}}" add_date="{{data}}" private="{{private}}" tags="{{#each tags}}{{this}},{{/each}}" target="_blank">{{title}}</a>
+        <a class="bookmark__links bookmark__links--js" href="{{href}}" add_date="{{data}}" private="{{private}}" tags="{{#each tags}}{{this}},{{/each}}" target="_blank">{{title}}</a>
         <span>{{description}}</span>
     </div>
 {{/each}}
@@ -178,9 +188,9 @@ a.btn__new:hover {
 <script type="text/javascript">
   ;(function(root) {
     var searchEl = document.querySelector('[name="q"]');
+    var allBookmarkItems = [].slice.call(document.querySelectorAll('.bookmark__links--js'));
 
     function doSearch(query) {
-      var allBookmarkItems = [].slice.call(document.querySelectorAll('a'));
       var noResultEl = document.querySelector('.no-result');
       var hadMatches = false;
       location.hash = query;
@@ -230,7 +240,6 @@ a.btn__new:hover {
     }
 
     function reset() {
-      var allBookmarkItems = [].slice.call(document.querySelectorAll('a'));
       var noResultEl = document.querySelector('.no-result');
       noResultEl.style.display = 'none';
 

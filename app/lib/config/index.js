@@ -7,7 +7,8 @@ var cfg = {
     user: process.env.DB_USER,
     password: process.env.DB_PASS
   },
-  loglevel: 'info'
+  loglevel: 'info',
+  searchMaxPageSize: 200
 };
 
 module.exports = cfg;
