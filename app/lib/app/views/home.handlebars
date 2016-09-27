@@ -189,7 +189,8 @@ a.btn__new:hover {
   ;(function(root) {
     var searchEl = document.querySelector('[name="q"]');
     var allBookmarkItems = [].slice.call(document.querySelectorAll('.bookmark__links--js'));
-
+    var keyupTimeout;
+    
     function searchEndpointPath() {
       return '/api/search';
     }
@@ -262,45 +263,6 @@ a.btn__new:hover {
       .catch(function(xhr, status, statusText) {
         console.log('Error talking to the search endpoint');
       });
-
-      // Array query
-      // query = query.trim().replace(/\s{2,}/g, ' ').split(' ').map(function(word) {
-      //   return word.toLowerCase();
-      // });
-
-      // allBookmarkItems.forEach(function(item) {
-      //   var itemSibling = item.parentNode.querySelector('span');
-
-      //   function itemMatchesQuery() {
-      //       var i = -1;
-      //       var matched = false;
-
-      //       while (++i < query.length) {
-      //         var keyword = query[i];
-      //         var matches = (item.textContent.toLowerCase().indexOf(keyword) > -1 ||
-      //                                 (item.getAttribute('tags') && item.getAttribute('tags').toLowerCase().indexOf(keyword) > -1) ||
-      //                                 (itemSibling !== null && itemSibling.textContent.toLowerCase().indexOf(keyword) > -1));
-      //         if (matches) {
-      //           matched = true;
-      //           break;
-      //         }
-
-      //       }
-
-      //       return matched;
-      //   }
-
-      //   item.setAttribute('target', '_blank');
-
-      //   if (itemMatchesQuery()) {
-      //     if (!hadMatches) hadMatches = true;
-      //     item.parentNode.style.display = 'inline-block';
-      //   } else {
-      //     item.parentNode.style.display = 'none';
-      //   }
-      // });
-
-
     }
 
     function reset() {
@@ -315,12 +277,16 @@ a.btn__new:hover {
     }
 
     searchEl.addEventListener('keyup', function(e) {
+      
       var query = this.value;
-      if (query !== '') {
-        doSearch(query);
-      } else {
-        reset();
-      }
+      if (keyupTimeout) clearTimeout(keyupTimeout);
+      keyupTimeout = setTimeout(function() {
+        if (query !== '') {
+          doSearch(query);
+        } else {
+          reset();
+        }
+      }, 200);
     }, false);
 
     if (location.hash.length > 1) {
