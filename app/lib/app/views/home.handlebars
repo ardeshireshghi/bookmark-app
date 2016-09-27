@@ -175,7 +175,7 @@ a.btn__new:hover {
   <input type="text" name="q" placeholder="search...">
 </section>
 <section class="no-result">Oops! No bookmarks found for this search!</section>
-<section class="">
+<section class="bookmark__list">
 {{#each bookmarks}}
     <div>
         <a class="bookmark__links bookmark__links--js" href="{{href}}" add_date="{{data}}" private="{{private}}" tags="{{#each tags}}{{this}},{{/each}}" target="_blank">{{title}}</a>
@@ -190,53 +190,117 @@ a.btn__new:hover {
     var searchEl = document.querySelector('[name="q"]');
     var allBookmarkItems = [].slice.call(document.querySelectorAll('.bookmark__links--js'));
 
+    function searchEndpointPath() {
+      return '/api/search';
+    }
+
+    function request(url) {
+      var r = new XMLHttpRequest();
+      var onSuccess;
+      var onError;
+
+      r.open('GET', url, true);
+      r.onreadystatechange = function() {
+        if (r.readyState === r.DONE) {
+            if (r.status >= 200 && r.status < 400) {
+              onSuccess(r.responseText);
+            } else {
+              onError(r, r.status, r.statusText);
+            }
+        }
+      };
+
+      r.send();
+
+      var self =  {
+        then: function(next) {
+          onSuccess = next;
+          return this;
+        },
+        catch: function(cb) {
+          onError = cb;
+        }
+      };
+
+      return self;
+    }
+
     function doSearch(query) {
       var noResultEl = document.querySelector('.no-result');
       var hadMatches = false;
       location.hash = query;
 
-      // Array query
-      query = query.trim().replace(/\s{2,}/g, ' ').split(' ').map(function(word) {
-        return word.toLowerCase();
-      });
-
-      allBookmarkItems.forEach(function(item) {
-        var itemSibling = item.parentNode.querySelector('span');
-
-        function itemMatchesQuery() {
-            var i = -1;
-            var matched = false;
-
-            while (++i < query.length) {
-              var keyword = query[i];
-              var matches = (item.textContent.toLowerCase().indexOf(keyword) > -1 ||
-                                      (item.getAttribute('tags') && item.getAttribute('tags').toLowerCase().indexOf(keyword) > -1) ||
-                                      (itemSibling !== null && itemSibling.textContent.toLowerCase().indexOf(keyword) > -1));
-              if (matches) {
-                matched = true;
-                break;
-              }
-
-            }
-
-            return matched;
-        }
-
-        item.setAttribute('target', '_blank');
-
-        if (itemMatchesQuery()) {
-          if (!hadMatches) hadMatches = true;
-          item.parentNode.style.display = 'inline-block';
-        } else {
-          item.parentNode.style.display = 'none';
-        }
-      });
-
-      if (!hadMatches) {
-        noResultEl.style.display = 'block';
-      } else {
+      request(searchEndpointPath().concat('?q=') + encodeURIComponent(query))
+      .then(function(results) {
+        var parseResults = JSON.parse(results);
+        var bookmarkListEl = document.querySelector('.bookmark__list');
+        bookmarkListEl.innerHTML = '';
         noResultEl.style.display = 'none';
-      }
+
+        if (!parseResults.length) {
+          noResultEl.style.display = 'block';
+          return;
+        }
+
+        function createBookmarkEl(model) {
+          var el = document.createElement('div');
+          var html = '<a class="bookmark__links bookmark__links--js" href="<%=href>" add_date="" private="false" tags="<%=tags>" target="_blank"><%=title></a><span><%=description></span>';
+
+          html = html.replace('<%=href>', model.href)
+                      .replace('<%=title>', model.title)
+                      .replace('<%=description>', model.desciption || '')
+                      .replace('<%=tags>', model.tags.join(','));
+
+          el.innerHTML = html;
+          return el;
+        }
+
+        parseResults.forEach(function(bookmark) {
+          bookmarkListEl.appendChild(createBookmarkEl(bookmark));
+        });
+      })
+      .catch(function(xhr, status, statusText) {
+        console.log('Error talking to the search endpoint');
+      });
+
+      // Array query
+      // query = query.trim().replace(/\s{2,}/g, ' ').split(' ').map(function(word) {
+      //   return word.toLowerCase();
+      // });
+
+      // allBookmarkItems.forEach(function(item) {
+      //   var itemSibling = item.parentNode.querySelector('span');
+
+      //   function itemMatchesQuery() {
+      //       var i = -1;
+      //       var matched = false;
+
+      //       while (++i < query.length) {
+      //         var keyword = query[i];
+      //         var matches = (item.textContent.toLowerCase().indexOf(keyword) > -1 ||
+      //                                 (item.getAttribute('tags') && item.getAttribute('tags').toLowerCase().indexOf(keyword) > -1) ||
+      //                                 (itemSibling !== null && itemSibling.textContent.toLowerCase().indexOf(keyword) > -1));
+      //         if (matches) {
+      //           matched = true;
+      //           break;
+      //         }
+
+      //       }
+
+      //       return matched;
+      //   }
+
+      //   item.setAttribute('target', '_blank');
+
+      //   if (itemMatchesQuery()) {
+      //     if (!hadMatches) hadMatches = true;
+      //     item.parentNode.style.display = 'inline-block';
+      //   } else {
+      //     item.parentNode.style.display = 'none';
+      //   }
+      // });
+
+
     }
 
     function reset() {

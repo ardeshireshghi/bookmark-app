@@ -14,30 +14,26 @@ module.exports = (keyword) => {
               .split(' ')
               .map((word) => word.toLowerCase());
 
-  words.forEach((word) => {
-    query.$or.push({$or: [
+  let re = new RegExp(words.join('|'), 'i');
+  query.$or = [
       {
         title: {
-            $regex: word,
+            $regex: re,
             $options: "i"
         }
       },
       {
         description: {
-            $regex: word,
+            $regex: re,
             $options: "i"
         }
-      }
-    ]});
-  });
-
-  query.$or.push({$or: [
-    {
-      tags: {
+      },
+      {
+        tags: {
           $in: words
+        }
       }
-    }
-  ]});
+  ];
 
   return query;
 };

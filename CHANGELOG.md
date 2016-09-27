@@ -1,4 +1,7 @@
-## 1.0.2: Added search functionality rest API endpoint:
+## 1.0.3: Changes to the backend search query:
+* Integration of the search API in the UI
+
+## 1.0.2: Added search functionality REST API endpoint:
 - Improvements to the node js code
 - Fixed some of the responsive and grid style issues
 
