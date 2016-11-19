@@ -1,6 +1,6 @@
 {
   "name": "bookmark-manager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Managing my bookmarks easily with smart search",
   "main": "app/index.js",
   "scripts": {

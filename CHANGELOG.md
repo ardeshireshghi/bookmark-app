@@ -1,3 +1,5 @@
+## 1.0.4: Dockerised the application
+
 ## 1.0.3: Changes to the backend search query:
 * Integration of the search API in the UI
 

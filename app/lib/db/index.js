@@ -5,8 +5,18 @@ const log = bunyan.createLogger({
   level: require('config').loglevel
 });
 
+function getConnectionString(dbConfig) {
+  let result = 'mongodb:\/\/';
+  if (dbConfig.user && dbConfig.password) {
+    result += `${dbConfig.user}:${dbConfig.password}@`;
+  }
+
+  result += `${dbConfig.host}/${dbConfig.name}`;
+  return result;
+}
+
 function initialise(dbConfig, callback) {
-  const connectionString = `mongodb:\/\/${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.name}`;
+  const connectionString = getConnectionString(dbConfig);
   mongoose.connect(connectionString);
   mongoose.Promise = require('bluebird');
 

@@ -1,0 +1,25 @@
+version: '2'
+services:
+  web:
+    build: .
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_PATH=./app/lib
+      - NODE_ENV=development
+      - PORT=8000
+      - DB_HOST=mongo
+      - DB_NAME=bookmarks
+    volumes:
+      - ./app:/usr/src/app/app
+    command: npm start
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo_data:/data
