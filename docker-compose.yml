@@ -16,7 +16,7 @@ services:
       - DB_NAME=bookmarks
     volumes:
       - ./app:/usr/src/app/app
-    command: npm start
+    command: npm watch
   mongo:
     image: mongo
     ports:

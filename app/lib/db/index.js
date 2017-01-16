@@ -1,3 +1,5 @@
+'use strict';
+
 const mongoose = require('mongoose');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({
